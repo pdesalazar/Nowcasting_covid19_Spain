@@ -154,8 +154,8 @@ full_dates=data.frame(onset_day=seq.Date(from=first_day,to=today,by="days"))
 #1.Observed time series by date or symptoms
 
 observed<-region_analysis%>%subset((complete.cases(onset_day) &
-                            complete.cases(report_day)),
-                         onset_day)%>%table()%>%as.data.frame()%>%
+                            complete.cases(report_day)),onset_day)%>%
+                         table()%>%as.data.frame()%>%
                          mutate(onset_day=as.Date(as.character(.)))%>%
                          subset(onset_day>=first_day &onset_day<=today)%>%
                          right_join(full_dates)%>%
@@ -289,8 +289,8 @@ repeat{
 }
 
 estimate_WT<-rename(as.data.frame(t(apply(post_estimates_WT[,2:(N_sample_R*100)], 
-                                          1, quantile, probs=c(0.0275, 0.5, 0.975),na.rm=TRUE)))
-                    ,lower_now= `2.75%` ,higher_now=`97.5%`,center_now=`50%`)
+                                          1, quantile, probs=c(0.0275, 0.5, 0.975),na.rm=TRUE))),
+                    lower_now= `2.75%` ,higher_now=`97.5%`,center_now=`50%`)
 #plot3 data frame
 df_plot3<-data.frame(mean_wt=estimate_WT$center_now, 
                      higher_wt=estimate_WT$higher_now,
@@ -314,7 +314,7 @@ plot3<-ggplot(df_plot3)+
   theme(axis.text.x=element_text(angle=60, hjust=1,size=size_text))
 
 plot3
-
+#Figure 1
 Final_plot<-plot_grid(plot1, plot2,plot3, ncol=1, align = "v")
 print(Final_plot)
 
